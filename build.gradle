@@ -16,11 +16,13 @@ if (runningJava < 25) {
 	throw new GradleException(
 		"This project needs Java 25 or newer to build (Minecraft 26.1 targets Java 25),\n" +
 		"but Gradle is running on Java ${runningJava}.\n\n" +
-		"Point JAVA_HOME at a JDK 25+ install and try again, for example:\n" +
-		"  Windows (PowerShell):  \$env:JAVA_HOME = \"C:\\Path\\To\\jdk-25\"\n" +
-		"  Linux / macOS:         export JAVA_HOME=/path/to/jdk-25\n\n" +
-		"Or point this one build at it:\n" +
-		"  ./gradlew build -Dorg.gradle.java.home=/path/to/jdk-25"
+		"Point JAVA_HOME at a JDK 25+ install and try again. Substitute the real\n" +
+		"path to your own JDK below - these are examples, not literal paths:\n" +
+		"  Windows (PowerShell):  \$env:JAVA_HOME = \"C:\\Program Files\\Java\\jdk-26\"\n" +
+		"  Linux / macOS:         export JAVA_HOME=/usr/lib/jvm/jdk-25\n\n" +
+		"Not sure where yours is? On Windows look in C:\\Program Files\\Java and\n" +
+		"C:\\Program Files\\Eclipse Adoptium. If you have no JDK 25+ at all, get\n" +
+		"one from https://adoptium.net/"
 	)
 }
 

@@ -18,16 +18,18 @@ support for in 2026 — so upstream builds no longer work on SkyBlock.
 > cannot compile this — JDK 21 is the usual culprit, since that is what Minecraft
 > 1.21 required. The build stops with an explanatory message if it finds one.
 >
-> Check with `java -version`. If it is below 25, grab a JDK from
-> [Adoptium](https://adoptium.net/) and point `JAVA_HOME` at it:
+> Check with `java -version`. If it is below 25, point `JAVA_HOME` at a JDK 25+
+> install — **using the real path on your machine**, not the example below. On
+> Windows, look in `C:\Program Files\Java` and `C:\Program Files\Eclipse Adoptium`
+> to find what you have; if you have none, get one from [Adoptium](https://adoptium.net/).
 >
 > ```powershell
-> # Windows (PowerShell)
-> $env:JAVA_HOME = "C:\Program Files\Java\jdk-26"
+> # Windows (PowerShell) - replace with your actual JDK path
+> $env:JAVA_HOME = "C:\Program Files\Java\jdk-26.0.1"
 > ```
 > ```bash
-> # Linux / macOS
-> export JAVA_HOME=/path/to/jdk-25
+> # Linux / macOS - replace with your actual JDK path
+> export JAVA_HOME=/usr/lib/jvm/jdk-25
 > ```
 
 ```bash
