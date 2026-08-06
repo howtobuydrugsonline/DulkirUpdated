@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "jarviscci",
+  "version": "${version}",
+  "name": "Jarvis Common Config Index",
+  "description": "Common Config Index for Minecraft mods",
+  "authors": [
+    "Linnea Gräf"
+  ],
+  "contact": {
+    "homepage": "https://nea.moe/projects/jarvis/",
+    "sources": "https://github.com/lineargraph/jarvis"
+  },
+  "license": "LGPL 3.0 or Later",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "moe.nea.jarvis.fabric.Main"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.19.3",
+    "minecraft": "~26.1",
+    "java": ">=25",
+    "fabric-api": ">=0.155.2+26.1.2"
+  }
+}
