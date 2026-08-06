@@ -14,8 +14,21 @@ support for in 2026 — so upstream builds no longer work on SkyBlock.
 
 ### Building it yourself
 
-Requires **JDK 25 or newer** — Minecraft 26.1 needs Java 25. This was built and
-tested with JDK 26.
+> **You need JDK 25 or newer.** Minecraft 26.1 targets Java 25, so an older JDK
+> cannot compile this — JDK 21 is the usual culprit, since that is what Minecraft
+> 1.21 required. The build stops with an explanatory message if it finds one.
+>
+> Check with `java -version`. If it is below 25, grab a JDK from
+> [Adoptium](https://adoptium.net/) and point `JAVA_HOME` at it:
+>
+> ```powershell
+> # Windows (PowerShell)
+> $env:JAVA_HOME = "C:\Program Files\Java\jdk-26"
+> ```
+> ```bash
+> # Linux / macOS
+> export JAVA_HOME=/path/to/jdk-25
+> ```
 
 ```bash
 git clone https://github.com/<your-username>/<repo-name>.git

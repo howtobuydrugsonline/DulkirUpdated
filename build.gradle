@@ -8,6 +8,22 @@ plugins {
 	id "org.jetbrains.kotlin.plugin.serialization" version "2.4.10"
 }
 
+// Minecraft 26.1 targets Java 25, so javac needs `--release 25`. On an older JDK
+// that surfaces as "error: release version 25 not supported", which does not
+// hint at the cause — fail early with something actionable instead.
+def runningJava = Integer.parseInt(JavaVersion.current().majorVersion)
+if (runningJava < 25) {
+	throw new GradleException(
+		"This project needs Java 25 or newer to build (Minecraft 26.1 targets Java 25),\n" +
+		"but Gradle is running on Java ${runningJava}.\n\n" +
+		"Point JAVA_HOME at a JDK 25+ install and try again, for example:\n" +
+		"  Windows (PowerShell):  \$env:JAVA_HOME = \"C:\\Path\\To\\jdk-25\"\n" +
+		"  Linux / macOS:         export JAVA_HOME=/path/to/jdk-25\n\n" +
+		"Or point this one build at it:\n" +
+		"  ./gradlew build -Dorg.gradle.java.home=/path/to/jdk-25"
+	)
+}
+
 version = project.mod_version
 group = project.maven_group
 

@@ -3,6 +3,21 @@ plugins {
 	id 'maven-publish'
 }
 
+// See the note in the root build.gradle: javac needs --release 25 for Minecraft
+// 26.1, and an older JDK reports that unhelpfully.
+def runningJava = Integer.parseInt(JavaVersion.current().majorVersion)
+if (runningJava < 25) {
+	throw new GradleException(
+		"This project needs Java 25 or newer to build (Minecraft 26.1 targets Java 25),\n" +
+		"but Gradle is running on Java ${runningJava}.\n\n" +
+		"Point JAVA_HOME at a JDK 25+ install and try again, for example:\n" +
+		"  Windows (PowerShell):  \$env:JAVA_HOME = \"C:\\Path\\To\\jdk-25\"\n" +
+		"  Linux / macOS:         export JAVA_HOME=/path/to/jdk-25\n\n" +
+		"Or point this one build at it:\n" +
+		"  ./gradlew build -Dorg.gradle.java.home=/path/to/jdk-25"
+	)
+}
+
 version = project.mod_version
 group = project.maven_group
 
