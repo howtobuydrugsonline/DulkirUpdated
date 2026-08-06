@@ -12,12 +12,29 @@ This is a fork of [inglettronald/DulkirMod-Fabric](https://github.com/inglettron
 ported to **Minecraft 26.1.2**. Upstream targets 1.21.11, which Hypixel dropped
 support for in 2026 — so upstream builds no longer work on SkyBlock.
 
-**Building.** Jarvis has no upstream 26.x release, so it is ported separately and
-must be installed to your local Maven repo *before* building this mod:
+**Building.** Jarvis has no upstream 26.x release, so it is ported separately in
+[jarvis-fabric](https://github.com/<your-username>/jarvis-fabric). Clone it as a
+sibling folder and this build picks it up automatically as a Gradle composite
+build — no extra install step:
+
+```
+parent/
+├── DulkirMod-Fabric/   <- this repo
+└── jarvis-fabric/      <- https://github.com/<your-username>/jarvis-fabric
+```
+
+```bash
+./gradlew build
+```
+
+Jarvis is bundled into the output jar, so the built jar is the only file users
+need to install.
+
+If you would rather not keep the sibling checkout, install Jarvis to your local
+Maven repo instead — the build falls back to it:
 
 ```bash
 cd ../jarvis-fabric && ./gradlew publishToMavenLocal
-cd ../DulkirMod-Fabric && ./gradlew build
 ```
 
 Requires **JDK 25+** (Minecraft 26.1 needs Java 25; this was built with JDK 26).

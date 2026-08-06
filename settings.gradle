@@ -8,3 +8,9 @@ pluginManagement {
 		gradlePluginPortal()
 	}
 }
+// Build Jarvis straight from the sibling checkout when it is present, so a plain
+// `gradlew build` here needs no publishToMavenLocal step. Falls back to
+// mavenLocal() and the declared repositories when the folder is absent.
+if (file("../jarvis-fabric/settings.gradle").exists()) {
+	includeBuild("../jarvis-fabric")
+}
