@@ -1,0 +1,18 @@
+# Normalise text files to LF in the repository so the tree is identical
+# regardless of the contributor's platform.
+* text=auto eol=lf
+
+# The Gradle wrapper script is executed by /bin/sh on Linux and macOS. If it is
+# ever committed with CRLF endings those users get "bad interpreter" errors, so
+# pin it to LF explicitly.
+gradlew text eol=lf
+
+# Windows batch files must keep CRLF.
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Never touch binaries.
+*.jar binary
+*.png binary
+*.ico binary
+*.hprof binary
