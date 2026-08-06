@@ -1,0 +1,55 @@
+{
+	"schemaVersion": 1,
+	"id": "dulkirmod-fabric",
+	"version": "${version}",
+	"name": "DulkirMod-Fabric",
+	"description": "Utility Mod for Hypixel Skyblock",
+	"authors": [
+		"inglettronald",
+		"nea89",
+		"Ilmars"
+	],
+	"contact": {
+		"homepage": "https://github.com/inglettronald",
+		"sources": "https://github.com/FabricMC/fabric-example-mod",
+		"issues": "https://discord.gg/juwhqyBCgA"
+	},
+	"license": "MPL-2.0",
+	"icon": "assets/dulkirmod-fabric/icon.png",
+	"environment": "client",
+	"entrypoints": {
+		"client": [
+			"com.dulkirfabric.DulkirModFabric::onInitializeClient"
+		],
+		"jarvis": [
+			"com.dulkirfabric.util.JarvisIntegrationPlugin"
+		],
+        "modmenu": [
+            "com.dulkirfabric.util.DulkirModMenuPlugin"
+        ]
+    },
+	"mixins": [
+		"dulkirmod-fabric.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.19.3",
+		"minecraft": "~26.1",
+		"java": ">=25",
+		"fabric-api": ">=0.155.2+26.1.2",
+		"fabric-language-kotlin": ">=1.13.13+kotlin.2.4.10"
+	},
+	"suggests": {
+		"Farsight": "https://www.curseforge.com/minecraft/mc-mods/farsight-fabric/files",
+		"Borderless Mining": "https://www.curseforge.com/minecraft/mc-mods/borderless-mining",
+		"Iris": "https://github.com/IrisShaders/Iris",
+		"MemoryLeakFix": "https://github.com/fxmorin/memoryleakfix",
+		"Model Gap Fix": "https://www.curseforge.com/minecraft/mc-mods/model-gap-fix",
+		"Capes": "https://www.curseforge.com/minecraft/mc-mods/capes",
+		"Continuity": "https://www.curseforge.com/minecraft/mc-mods/continuity",
+		"Lithium, Sodium": "https://jellysquid.me/projects/",
+		"Mod Menu": "https://modrinth.com/mod/modmenu",
+		"Puzzle": "https://www.midnightdust.eu/",
+		"Starlight": "https://www.curseforge.com/minecraft/mc-mods/starlight"
+	},
+	"accessWidener" : "dulkirmod.accesswidener"
+}

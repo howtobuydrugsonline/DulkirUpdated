@@ -1,0 +1,161 @@
+package com.dulkirfabric
+
+import com.dulkirfabric.DulkirModFabric.EVENT_BUS
+import com.dulkirfabric.commands.*
+import com.dulkirfabric.events.*
+import com.dulkirfabric.events.chat.ChatEvents
+import com.dulkirfabric.events.chat.ModifyCommandEvent
+import com.dulkirfabric.events.chat.OverlayReceivedEvent
+import com.dulkirfabric.features.*
+import com.dulkirfabric.features.chat.AbiPhoneDND
+import com.dulkirfabric.features.chat.BridgeBotFormatter
+import com.dulkirfabric.features.filters.CullExplosionParticles
+import com.dulkirfabric.features.filters.DamageNumbers
+import com.dulkirfabric.features.filters.Lightning
+import com.dulkirfabric.features.slayer.BossTimer
+import com.dulkirfabric.features.slayer.Demonlord
+import com.dulkirfabric.features.slayer.MiniBossHighlight
+import com.dulkirfabric.features.slayer.Vampire
+import com.dulkirfabric.hud.ActionBarHudReplacements
+import com.dulkirfabric.hud.Garden
+import com.dulkirfabric.hud.SpeedOverlay
+import com.dulkirfabric.util.ActionBarUtil
+import com.dulkirfabric.util.ScoreBoardUtils
+import com.dulkirfabric.util.TablistUtils
+import com.dulkirfabric.util.Utils
+import com.dulkirfabric.util.render.DulkirRenderTypes
+import com.dulkirfabric.util.render.HudRenderUtil
+import com.dulkirfabric.util.render.RenderUtil
+import com.mojang.blaze3d.vertex.BufferBuilder
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientEntityEvents
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
+import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents
+import net.fabricmc.fabric.api.client.message.v1.ClientSendMessageEvents
+import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElement
+import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry
+import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents
+import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents
+import net.fabricmc.fabric.api.client.screen.v1.ScreenMouseEvents
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLevelEvents
+import net.fabricmc.loader.api.FabricLoader
+import net.minecraft.client.DeltaTracker
+import net.minecraft.client.gui.GuiGraphicsExtractor
+import net.minecraft.resources.Identifier
+
+/**
+ * Collection of different mod registration stuff ran on initializing the mod. It is separated for readability
+ * purposes, as the list of features is planned to be quite large.
+ */
+object Registrations {
+    private var tickCount: Int = 0
+
+    fun registerCommands() {
+        val cre = ClientCommandRegistrationCallback.EVENT
+        cre.register(ConfigCommand::register)
+        JoinDungeonCommands.objects.forEach { it -> cre.register(it::register) }
+        cre.register(DynamicKeyCommand::register)
+        cre.register(AnimationCommand::register)
+        if (FabricLoader.getInstance().isDevelopmentEnvironment)
+            cre.register(TestCommand::register)
+    }
+
+    fun registerEventListeners() {
+        EVENT_BUS.subscribe(DulkirModFabric)
+        EVENT_BUS.subscribe(KeyShortCutImpl)
+        EVENT_BUS.subscribe(RenderTest)
+        EVENT_BUS.subscribe(TooltipImpl)
+        EVENT_BUS.subscribe(CustomBlockOutline)
+        EVENT_BUS.subscribe(AbiPhoneDND)
+        EVENT_BUS.subscribe(InventoryScale)
+        EVENT_BUS.subscribe(IPhoneAlarm)
+        EVENT_BUS.subscribe(AliasImpl)
+        EVENT_BUS.subscribe(EffigyDisplay)
+        EVENT_BUS.subscribe(TablistUtils)
+        EVENT_BUS.subscribe(CullExplosionParticles)
+        EVENT_BUS.subscribe(CooldownDisplays)
+        EVENT_BUS.subscribe(ArachneFeatures)
+        EVENT_BUS.subscribe(BridgeBotFormatter)
+        EVENT_BUS.subscribe(SpeedOverlay)
+        EVENT_BUS.subscribe(ActionBarUtil)
+        EVENT_BUS.subscribe(ActionBarHudReplacements)
+        EVENT_BUS.subscribe(EtherwarpHighlight)
+        EVENT_BUS.subscribe(MiniBossHighlight)
+        EVENT_BUS.subscribe(ScoreBoardUtils)
+        EVENT_BUS.subscribe(HudRenderUtil)
+        EVENT_BUS.subscribe(Demonlord)
+        EVENT_BUS.subscribe(Lightning)
+        EVENT_BUS.subscribe(Utils)
+        EVENT_BUS.subscribe(BossTimer)
+        EVENT_BUS.subscribe(DamageNumbers)
+        EVENT_BUS.subscribe(Garden)
+        EVENT_BUS.subscribe(VisitorAlert)
+        EVENT_BUS.subscribe(BrokenHyp)
+        EVENT_BUS.subscribe(Vampire)
+
+        if (FabricLoader.getInstance().isDevelopmentEnvironment)
+            EVENT_BUS.subscribe(RenderTest)
+    }
+
+    @Suppress("unused")
+    fun registerEvents() {
+        // Register Custom Tick event, so we can use it like 1.8.9 forge
+        ClientTickEvents.START_CLIENT_TICK.register { _ ->
+            ClientTickEvent.post()
+            if (tickCount % 20 == 0) LongUpdateEvent.post()
+            tickCount++
+        }
+        ClientReceiveMessageEvents.ALLOW_GAME.register { message, overlay ->
+            if (!overlay)
+                return@register !ChatEvents.AllowChat(message).post()
+            return@register true
+        }
+        ClientReceiveMessageEvents.MODIFY_GAME.register { message, overlay ->
+            if (overlay)
+                return@register OverlayReceivedEvent(message).post()
+            return@register ChatEvents.ModifyChat(message).post()
+        }
+
+        ClientSendMessageEvents.MODIFY_COMMAND.register { command ->
+            ModifyCommandEvent(command).also { it.post() }.command
+        }
+
+        LevelRenderEvents.END_MAIN.register { context ->
+            WorldRenderLastEvent(context).post()
+            DulkirRenderTypes.TYPES.forEach {
+                val buffer = RenderUtil.getBufferFor(it)
+                val meshData = buffer.build() ?: return@forEach
+                it.draw(meshData)
+            }
+            RenderUtil.endFrame()
+        }
+
+        ScreenEvents.BEFORE_INIT.register(
+            ScreenEvents.BeforeInit { client, screen, scaledWidth, scaledHeight ->
+                ScreenMouseEvents.beforeMouseScroll(screen)
+                    .register(ScreenMouseEvents.BeforeMouseScroll { coolScreen, mouseX, mouseY, horizontalAmount, verticalAmount ->
+                        MouseScrollEvent(coolScreen, mouseX, mouseY, horizontalAmount, verticalAmount).post()
+                    })
+            }
+        )
+
+        LevelRenderEvents.BEFORE_BLOCK_OUTLINE.register { worldRenderContext, blockOutlineContext ->
+            !BlockOutlineEvent(worldRenderContext, blockOutlineContext).post()
+        }
+        ClientEntityEvents.ENTITY_LOAD.register { entity, world ->
+            EntityLoadEvent(entity, world).post()
+        }
+        ServerLevelEvents.LOAD.register { server, world ->
+            WorldLoadEvent(server, world).post()
+        }
+
+        val id = Identifier.parse("dulkir_hud");
+        val element = object : HudElement {
+            override fun extractRenderState(guiGraphics: GuiGraphicsExtractor, deltaTracker: DeltaTracker) {
+                HudRenderEvent(guiGraphics, deltaTracker.getGameTimeDeltaPartialTick(true)).post()
+            }
+        }
+        HudElementRegistry.addLast(id, element)
+
+    }
+}

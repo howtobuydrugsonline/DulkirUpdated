@@ -1,0 +1,8 @@
+accessWidener   v2  official
+accessible method net/minecraft/client/gui/components/PlayerTabOverlay getPlayerInfos ()Ljava/util/List;
+accessible field net/minecraft/world/item/component/CustomData tag Lnet/minecraft/nbt/CompoundTag;
+accessible field net/minecraft/client/renderer/LevelRenderer renderBuffers Lnet/minecraft/client/renderer/RenderBuffers;
+accessible field net/minecraft/network/chat/TextColor name Ljava/lang/String;
+accessible field net/minecraft/ChatFormatting code C
+accessible field net/minecraft/world/item/component/ResolvableProfile partialProfile Lcom/mojang/authlib/GameProfile;
+accessible method net/minecraft/client/multiplayer/ClientLevel getEntities ()Lnet/minecraft/world/level/entity/LevelEntityGetter;

@@ -1,0 +1,33 @@
+{
+  "required": true,
+  "package": "com.dulkirfabric.mixin",
+  "compatibilityLevel": "JAVA_25",
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "client": [
+    "io.KeyboardHandlerMixin",
+    "io.MouseHandlerMixin",
+    "io.SoundEngineMixin",
+    "render.CameraTypeMixin",
+    "render.EffectsInInventoryMixin",
+    "render.EntityRendererMixin",
+    "render.GameRendererMixin",
+    "render.GuiGraphicsMixin",
+    "render.GuiMixin",
+    "render.InventoryScreenMixin",
+    "render.ItemInHandRendererMixin",
+    "render.LoomScreenMixin",
+    "render.MinecraftMixin",
+    "render.ParticleEngineMixin",
+    "render.PauseScreenMixin",
+    "render.ScreenEffectRendererMixin",
+    "render.ScreenMixin"
+  ],
+  "mixins": [
+    "ItemMixin",
+    "ItemStackMixin",
+    "YggdrasilMinecraftSessionServiceMixin",
+    "render.LivingEntityMixin"
+  ]
+}
