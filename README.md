@@ -4,6 +4,40 @@
 
 Home of dulkirmod for modern versions of minecraft.
 
+---
+
+## ⚠️ Fork: Minecraft 26.1.2 port
+
+This is a fork of [inglettronald/DulkirMod-Fabric](https://github.com/inglettronald/DulkirMod-Fabric)
+ported to **Minecraft 26.1.2**. Upstream targets 1.21.11, which Hypixel dropped
+support for in 2026 — so upstream builds no longer work on SkyBlock.
+
+**Building.** Jarvis has no upstream 26.x release, so it is ported separately and
+must be installed to your local Maven repo *before* building this mod:
+
+```bash
+cd ../jarvis-fabric && ./gradlew publishToMavenLocal
+cd ../DulkirMod-Fabric && ./gradlew build
+```
+
+Requires **JDK 25+** (Minecraft 26.1 needs Java 25; this was built with JDK 26).
+
+`./gradlew runClient` runs without DevAuth by default. To use your own account,
+configure `~/.devauth/config.toml` and run `./gradlew runClient -Pdevauth=true`.
+
+**Main changes from upstream:**
+- Migrated to the non-remapping `net.fabricmc.fabric-loom` toolchain (Gradle 9.5.1,
+  Java 25, Kotlin 2.4.10) required from 26.1 onward.
+- Updated for the 26.1 GUI rework (immediate-mode drawing → render-state
+  extraction): `GuiGraphics`→`GuiGraphicsExtractor`, `Gui.render*`→`extract*`,
+  `GameRenderer.render`→`extractGui`, and matching mixin retargets.
+- Fabric API `World*`→`Level*` renames; Blaze3D depth/blend state records.
+- Access widener namespace `named`→`official`.
+
+Upstream is MPL-2.0; this fork remains MPL-2.0. See `LICENSE`.
+
+---
+
 
 DulkirMod 1.8.9 Can be found [here](https://github.com/inglettronald/DulkirMod).
 

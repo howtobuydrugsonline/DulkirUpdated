@@ -3,7 +3,7 @@ package com.dulkirfabric.util.render
 import com.dulkirfabric.DulkirModFabric.mc
 import com.dulkirfabric.events.HudRenderEvent
 import meteordevelopment.orbit.EventHandler
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.network.chat.Component
 import java.time.Duration
 
@@ -12,7 +12,7 @@ object HudRenderUtil {
     private var curTitle: Component? = null
     private var clearTime: Long = -1
 
-    private fun drawTitle(context: GuiGraphics, content: Component) {
+    private fun drawTitle(context: GuiGraphicsExtractor, content: Component) {
         val matrices = context.pose()
         val font = mc.font
         val w = font.width(content)
@@ -20,7 +20,7 @@ object HudRenderUtil {
         matrices.pushMatrix()
         matrices.translate(mc.window.guiScaledWidth / 3f, mc.window.guiScaledHeight / 2f)
         matrices.scale(sf, sf)
-        context.drawString(font, content, 0, -font.lineHeight / 2, -1, true)
+        context.text(font, content, 0, -font.lineHeight / 2, -1, true)
         matrices.popMatrix()
     }
 

@@ -25,7 +25,8 @@ public abstract class ItemStackMixin {
     )
     private void onGetTooltip(Item.TooltipContext tooltipContext, Player player, TooltipFlag tooltipFlag,
                               CallbackInfoReturnable<List<Component>> cir) {
-        ItemChangeHandler.INSTANCE.handle(this.getItem().getName().getString());
+        // 26.1: Item.getName() now requires the stack it is being resolved for
+        ItemChangeHandler.INSTANCE.handle(this.getItem().getName((ItemStack) (Object) this).getString());
     }
 
 }

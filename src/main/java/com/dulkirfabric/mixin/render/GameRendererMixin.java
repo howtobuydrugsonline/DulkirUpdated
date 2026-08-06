@@ -6,7 +6,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.DeltaTracker;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import org.objectweb.asm.Opcodes;
@@ -20,14 +20,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class GameRendererMixin {
 
     @WrapOperation(
-            method = "render",
+            // 26.1 split GameRenderer.render; the screen pass now lives in extractGui
+            method = "extractGui",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/screens/Screen;renderWithTooltipAndSubtitles" +
-                            "(Lnet/minecraft/client/gui/GuiGraphics;IIF)V"
+                    target = "Lnet/minecraft/client/gui/screens/Screen;extractRenderStateWithTooltipAndSubtitles" +
+                            "(Lnet/minecraft/client/gui/GuiGraphicsExtractor;IIF)V"
             )
     )
-    private void dulkir$wrapScreenRender(Screen instance, GuiGraphics guiGraphics, int mouseX, int mouseY, float f,
+    private void dulkir$wrapScreenRender(Screen instance, GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float f,
                                          Operation<Void> original) {
         guiGraphics.pose().pushMatrix();
         guiGraphics.pose().scale(InventoryScale.INSTANCE.getScale(), InventoryScale.INSTANCE.getScale());

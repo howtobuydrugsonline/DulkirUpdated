@@ -3,10 +3,10 @@ package com.dulkirfabric.util.render
 import com.dulkirfabric.DulkirModFabric.mc
 import com.mojang.blaze3d.vertex.BufferBuilder
 import com.mojang.blaze3d.vertex.PoseStack
-import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderContext
+import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderContext
 import net.minecraft.ChatFormatting
 import net.minecraft.client.gui.Font
-import net.minecraft.client.renderer.LightTexture
+import net.minecraft.util.Brightness
 import net.minecraft.network.chat.Component
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
@@ -19,13 +19,13 @@ import kotlin.math.sqrt
 object WorldRenderUtils {
 
     fun drawWireFrame(
-        context: WorldRenderContext,
+        context: LevelRenderContext,
         box: AABB,
         color: Color,
         thickness: Float,
         depthTest: Boolean = true
     ) {
-        val matrices = context.matrices() ?: return
+        val matrices = context.poseStack() ?: return
         val layer = if (depthTest) DulkirRenderTypes.DULKIR_TRIANGLE_STRIP else DulkirRenderTypes.DULKIR_TRIANGLE_STRIP_ESP
         val camera = context.gameRenderer().mainCamera
         val camPos = camera.position()
@@ -85,14 +85,14 @@ object WorldRenderUtils {
 
     fun renderWaypoint(
         text: Component,
-        context: WorldRenderContext,
+        context: LevelRenderContext,
         pos: Vec3,
         dist: Boolean = true
     ) {
         val layer = DulkirRenderTypes.DULKIR_QUADS_ESP
         val player = mc.player ?: return;
         val d: Double = pos.distanceTo(player.position())
-        val matrices = context.matrices() ?: return
+        val matrices = context.poseStack() ?: return
         matrices.pushPose()
         val camera = context.gameRenderer().mainCamera
         val magnitude = sqrt((pos.x - camera.position().x).pow(2) +
@@ -125,26 +125,26 @@ object WorldRenderUtils {
         val matrix4f = matrices.last().pose()
         buf.addVertex(matrix4f, -1.0f - font.width(text) / 2, -1.0f, 0.0f)
             .setColor(j)
-            .setLight(LightTexture.FULL_BRIGHT)
+            .setLight(Brightness.FULL_BRIGHT.pack())
         buf.addVertex(matrix4f, -1.0f - font.width(text) / 2, font.lineHeight.toFloat(), 0.0f)
             .setColor(j)
-            .setLight(LightTexture.FULL_BRIGHT)
+            .setLight(Brightness.FULL_BRIGHT.pack())
         buf.addVertex(matrix4f, font.width(text).toFloat() / 2, font.lineHeight.toFloat(), 0.0f)
             .setColor(j)
-            .setLight(LightTexture.FULL_BRIGHT)
+            .setLight(Brightness.FULL_BRIGHT.pack())
         buf.addVertex(matrix4f, font.width(text).toFloat() / 2, -1.0f, 0.0f)
             .setColor(j)
-            .setLight(LightTexture.FULL_BRIGHT)
+            .setLight(Brightness.FULL_BRIGHT.pack())
 
         // Translate forward for text rendering
         matrices.translate(0F, 0F, 0.01F)
         val textMatrix = matrices.last().pose()
-        val bufferSource = context.consumers() ?: return
+        val bufferSource = context.bufferSource() ?: return
 
         font.drawInBatch(
             text, -font.width(text).toFloat() / 2, 0f, 0xFFFFFFFF.toInt(), false, textMatrix, bufferSource,
             Font.DisplayMode.SEE_THROUGH,
-            0, LightTexture.FULL_BRIGHT
+            0, Brightness.FULL_BRIGHT.pack()
         )
 
         if (dist) {
@@ -153,7 +153,7 @@ object WorldRenderUtils {
             font.drawInBatch(
                 distText, -font.width(distText).toFloat() / 2, 10f, 0xFFFFFFFF.toInt(), false, textMatrix, bufferSource,
                 Font.DisplayMode.SEE_THROUGH,
-                0, LightTexture.FULL_BRIGHT
+                0, Brightness.FULL_BRIGHT.pack()
             )
         }
 
@@ -164,7 +164,7 @@ object WorldRenderUtils {
      * Draws a filled box at a given position
      */
     fun drawBox(
-        context: WorldRenderContext,
+        context: LevelRenderContext,
         x: Double,
         y: Double,
         z: Double,
@@ -180,7 +180,7 @@ object WorldRenderUtils {
             DulkirRenderTypes.DULKIR_TRIANGLE_STRIP_ESP
         }
 
-        val matrices = context.matrices() ?: return
+        val matrices = context.poseStack() ?: return
         val buf = RenderUtil.getBufferFor(layer)
         matrices.pushPose()
         val camera = context.gameRenderer().mainCamera;

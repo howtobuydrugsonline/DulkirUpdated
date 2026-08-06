@@ -34,13 +34,13 @@ import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents
 import net.fabricmc.fabric.api.client.message.v1.ClientSendMessageEvents
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElement
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry
-import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents
+import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents
 import net.fabricmc.fabric.api.client.screen.v1.ScreenMouseEvents
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLevelEvents
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.client.DeltaTracker
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.resources.Identifier
 
 /**
@@ -120,7 +120,7 @@ object Registrations {
             ModifyCommandEvent(command).also { it.post() }.command
         }
 
-        WorldRenderEvents.END_MAIN.register { context ->
+        LevelRenderEvents.END_MAIN.register { context ->
             WorldRenderLastEvent(context).post()
             DulkirRenderTypes.TYPES.forEach {
                 val buffer = RenderUtil.getBufferFor(it)
@@ -139,19 +139,19 @@ object Registrations {
             }
         )
 
-        WorldRenderEvents.BEFORE_BLOCK_OUTLINE.register { worldRenderContext, blockOutlineContext ->
+        LevelRenderEvents.BEFORE_BLOCK_OUTLINE.register { worldRenderContext, blockOutlineContext ->
             !BlockOutlineEvent(worldRenderContext, blockOutlineContext).post()
         }
         ClientEntityEvents.ENTITY_LOAD.register { entity, world ->
             EntityLoadEvent(entity, world).post()
         }
-        ServerWorldEvents.LOAD.register { server, world ->
+        ServerLevelEvents.LOAD.register { server, world ->
             WorldLoadEvent(server, world).post()
         }
 
         val id = Identifier.parse("dulkir_hud");
         val element = object : HudElement {
-            override fun render(guiGraphics: GuiGraphics, deltaTracker: DeltaTracker) {
+            override fun extractRenderState(guiGraphics: GuiGraphicsExtractor, deltaTracker: DeltaTracker) {
                 HudRenderEvent(guiGraphics, deltaTracker.getGameTimeDeltaPartialTick(true)).post()
             }
         }
