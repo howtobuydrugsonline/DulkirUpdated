@@ -33,8 +33,8 @@ support for in 2026 — so upstream builds no longer work on SkyBlock.
 > ```
 
 ```bash
-git clone https://github.com/<your-username>/<repo-name>.git
-cd <repo-name>
+git clone https://github.com/howtobuydrugsonline/DulkirUpdated.git
+cd DulkirUpdated
 ./gradlew build
 ```
 
