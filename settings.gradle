@@ -1,0 +1,16 @@
+pluginManagement {
+	repositories {
+		maven {
+			name = 'Fabric'
+			url = 'https://maven.fabricmc.net/'
+		}
+		mavenCentral()
+		gradlePluginPortal()
+	}
+}
+// Jarvis lives in this repository (jarvis-fabric/) and is built as part of this
+// build, so a plain `gradlew build` needs no separate install step. Falls back
+// to mavenLocal() and the declared repositories if the folder is ever absent.
+if (file("jarvis-fabric/settings.gradle").exists()) {
+	includeBuild("jarvis-fabric")
+}
