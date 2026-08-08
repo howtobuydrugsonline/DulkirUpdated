@@ -11,7 +11,27 @@ This is a fork of [inglettronald/DulkirMod-Fabric](https://github.com/inglettron
 ported to **Minecraft 26.1.2**. Upstream targets 1.21.11, which Hypixel dropped
 support for in 2026 — so upstream builds no longer work on SkyBlock.
 
+### 📥 Download
+
+**[Get the latest release here](../../releases/latest)** — grab the `.jar` and you're done.
+No need to build anything.
+
+Then:
+
+1. Install [Fabric Loader](https://fabricmc.net/use/installer) 0.19.3+ for Minecraft **26.1.2**
+2. Put these in your `.minecraft/mods` folder:
+   - the downloaded `DulkirMod-Fabric-*.jar`
+   - [Fabric API](https://modrinth.com/mod/fabric-api) `0.155.2+26.1.2`
+   - [Fabric Language Kotlin](https://modrinth.com/mod/fabric-language-kotlin) `1.13.13+`
+3. Make sure the profile runs on **Java 25 or newer**
+
+Cloth Config, Orbit and Jarvis are bundled inside the jar — don't download those
+separately. If the mod doesn't show up in-game, it's almost always the Java
+version.
+
 ### Building it yourself
+
+*(Only if you want to modify it — most people should just use the download above.)*
 
 > **You need JDK 25 or newer.** Minecraft 26.1 targets Java 25, so an older JDK
 > cannot compile this — JDK 21 is the usual culprit, since that is what Minecraft
