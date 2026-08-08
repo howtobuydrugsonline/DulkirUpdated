@@ -1,6 +1,5 @@
 # DulkirMod-Fabric
-[![discord badge](https://img.shields.io/discord/819011720001224735?label=discord&color=9089DA&logo=discord&style=for-the-badge)](https://discord.gg/WnJwrNZQSn)
-[![twitch](https://img.shields.io/twitch/status/dulkir?style=for-the-badge)](https://www.twitch.tv/dulkir)
+
 
 Home of dulkirmod for modern versions of minecraft.
 
