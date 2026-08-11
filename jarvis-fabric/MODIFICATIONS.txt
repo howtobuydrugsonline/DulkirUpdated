@@ -1,0 +1,36 @@
+Jarvis CCI - modified version
+=============================
+
+This is a MODIFIED version of Jarvis, as required to be stated by the
+GNU Lesser General Public License v3 (see COPYING and COPYING.LESSER).
+
+Original work:  Jarvis Common Config Index, by Linnea Graef
+                https://github.com/lineargraph/jarvis
+Based on:       commit 3dedb72 (last upstream commit, targeting Minecraft 1.21.10)
+
+Modified on:    2026-08-06
+Modified by:    howtobuydrugsonline
+Source of this modified version:
+                https://github.com/howtobuydrugsonline/DulkirUpdated
+
+Changes made
+------------
+ * Ported to Minecraft 26.1.2 (Fabric). Upstream has no Minecraft 26.x release.
+ * Restructured from a multi-module Architectury project into a single Fabric
+   module. The Forge platform was dropped; this version is Fabric-only.
+ * Migrated to the non-remapping net.fabricmc.fabric-loom toolchain
+   (Gradle 9.5.1, Java 25) required from Minecraft 26.1 onward.
+ * Updated for Minecraft 26.1 API changes:
+     - ResourceLocation      -> Identifier
+     - GuiGraphics           -> GuiGraphicsExtractor
+     - Screen.render         -> Screen.extractRenderState
+     - drawCenteredString    -> centeredText
+     - submitOutline         -> outline
+     - displayClientMessage  -> sendSystemMessage
+     - Fabric keybinding.v1.KeyBindingHelper -> keymapping.v1.KeyMappingHelper
+ * Registration of the HUD editor keybind no longer crashes the game when
+   another mod has already registered the same keybind ID.
+ * Removed empty mixin configurations and access widener.
+
+This modified version remains licensed under the LGPL-3.0-or-later, the same
+licence as the original.

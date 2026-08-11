@@ -61,6 +61,10 @@ java {
 jar {
 	from("COPYING") { rename { "${it}_${base.archivesName.get()}" } }
 	from("COPYING.LESSER") { rename { "${it}_${base.archivesName.get()}" } }
+	// LGPL-3.0 section 5(a) requires a modified work to carry prominent notices
+	// stating that it was modified, and the date. That has to travel with the
+	// jar, not just live in the repository.
+	from("MODIFICATIONS.txt")
 }
 
 publishing {
